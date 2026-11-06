@@ -4,6 +4,8 @@ A mobile-first, static dashboard for [Weather Display](https://www.weather-displ
 
 > **Attribution.** CrispWDL is a fork and redesign of [FreshWDL by Yerren](https://github.com/Yerren/FreshWDL) and builds on its work. Credit for the original project belongs to its author and contributors. Like upstream, it is licensed under the GNU GPL v3 (see [LICENSE](LICENSE)). The redesign was proposed upstream in [Yerren/FreshWDL#61](https://github.com/Yerren/FreshWDL/pull/61).
 
+**Live demo:** [Varmestua](https://varmestua.tomrefjordil.no/weather.html)
+
 ## Quick start: download and deploy
 
 You do not need Node.js or any build tools.
