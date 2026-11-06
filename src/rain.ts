@@ -16,7 +16,7 @@ export function rainIntervals(points: readonly HistoryPoint[]): RainInterval[] {
     const current = points[index]!
     const amount = current.value - previous.value
     if (!Number.isFinite(amount) || previous.value < 0 || current.value < 0 || amount < 0) {
-      console.warn('FreshWDL omitted an invalid precipitation interval', previous, current)
+      console.warn('CrispWDL omitted an invalid precipitation interval', previous, current)
       continue
     }
     const start = /^([01]?\d|2[0-3]):([0-5]\d)$/.exec(previous.label)

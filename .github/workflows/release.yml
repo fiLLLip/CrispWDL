@@ -36,11 +36,11 @@ jobs:
           RELEASE_TAG: ${{ github.ref_name }}
         run: |
           mkdir -p release
-          cp -R dist "release/FreshWDL-${RELEASE_TAG}"
-          tar -C release -czf "FreshWDL-${RELEASE_TAG}.tar.gz" "FreshWDL-${RELEASE_TAG}"
+          cp -R dist "release/CrispWDL-${RELEASE_TAG}"
+          tar -C release -czf "CrispWDL-${RELEASE_TAG}.tar.gz" "CrispWDL-${RELEASE_TAG}"
           (
             cd release
-            zip -qr "../FreshWDL-${RELEASE_TAG}.zip" "FreshWDL-${RELEASE_TAG}"
+            zip -qr "../CrispWDL-${RELEASE_TAG}.zip" "CrispWDL-${RELEASE_TAG}"
           )
 
       - name: Create GitHub release
@@ -49,8 +49,8 @@ jobs:
           RELEASE_TAG: ${{ github.ref_name }}
         run: |
           gh release create "$RELEASE_TAG" \
-            "FreshWDL-${RELEASE_TAG}.zip" \
-            "FreshWDL-${RELEASE_TAG}.tar.gz" \
+            "CrispWDL-${RELEASE_TAG}.zip" \
+            "CrispWDL-${RELEASE_TAG}.tar.gz" \
             --target "$GITHUB_SHA" \
             --generate-notes \
-            --title "FreshWDL ${RELEASE_TAG}"
+            --title "CrispWDL ${RELEASE_TAG}"

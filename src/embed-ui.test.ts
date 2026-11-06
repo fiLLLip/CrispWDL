@@ -195,8 +195,8 @@ describe('embed appearance and preference isolation', () => {
   })
 
   it('ignores saved dashboard preferences without changing them or dashboard defaults', () => {
-    localStorage.setItem('freshwdl-v2-theme', 'dark')
-    localStorage.setItem('freshwdl-v2-units', JSON.stringify({ temperature: 'fahrenheit' }))
+    localStorage.setItem('crispwdl-v2-theme', 'dark')
+    localStorage.setItem('crispwdl-v2-units', JSON.stringify({ temperature: 'fahrenheit' }))
     const { store } = mount()
     expect(store.state.theme).toBe('light')
     expect(store.state.units.temperature).toBe('celsius')

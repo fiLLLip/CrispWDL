@@ -32,7 +32,7 @@ describe('configuration', () => {
     expect(mergeConfig({ pollingIntervalMs: 60_000 })).toMatchObject({
       pollingIntervalMs: 60_000,
     })
-    expect(mergeConfig({ siteName: '   ' })).toMatchObject({ siteName: 'FreshWDL' })
+    expect(mergeConfig({ siteName: '   ' })).toMatchObject({ siteName: 'CrispWDL' })
   })
 
   it('accepts direct raw-feed configuration', () => {

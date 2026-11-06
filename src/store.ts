@@ -6,8 +6,8 @@ import type {
   WeatherData,
 } from './domain'
 
-const unitsStorageKey = 'freshwdl-v2-units'
-const themeStorageKey = 'freshwdl-v2-theme'
+const unitsStorageKey = 'crispwdl-v2-units'
+const themeStorageKey = 'crispwdl-v2-theme'
 
 export interface StoreOptions {
   persistPreferences?: boolean
@@ -19,7 +19,7 @@ function restoredUnits(config: AppConfig): UnitPreferences {
     const saved = localStorage.getItem(unitsStorageKey)
     return saved ? { ...config.units, ...JSON.parse(saved) } : { ...config.units }
   } catch (error) {
-    console.warn('FreshWDL could not restore saved unit preferences', error)
+    console.warn('CrispWDL could not restore saved unit preferences', error)
     return { ...config.units }
   }
 }
@@ -29,7 +29,7 @@ function restoredTheme(): ThemeMode {
     const saved = localStorage.getItem(themeStorageKey)
     return saved === 'light' || saved === 'dark' ? saved : 'system'
   } catch (error) {
-    console.warn('FreshWDL could not restore the saved appearance', error)
+    console.warn('CrispWDL could not restore the saved appearance', error)
     return 'system'
   }
 }

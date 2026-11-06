@@ -17,8 +17,8 @@ const defaultUnits: UnitPreferences = {
 }
 
 export const defaultConfig: AppConfig = {
-  stationName: 'FreshWDL',
-  siteName: 'FreshWDL',
+  stationName: 'CrispWDL',
+  siteName: 'CrispWDL',
   siteUrl: './',
   dashboardUrl: './',
   locale: 'nb',
@@ -187,7 +187,7 @@ export function mergeConfig(input: unknown): AppConfig {
   }
 }
 
-export async function loadConfig(url = './freshwdl.config.json'): Promise<AppConfig> {
+export async function loadConfig(url = './crispwdl.config.json'): Promise<AppConfig> {
   const response = await fetch(url, { cache: 'no-store' })
   if (response.status === 404) return structuredClone(defaultConfig)
   if (!response.ok) throw new Error(`Configuration request failed (${response.status})`)

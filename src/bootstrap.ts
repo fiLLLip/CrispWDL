@@ -8,7 +8,7 @@ export async function bootstrap(
   options: StoreOptions = {},
 ): Promise<void> {
   const root = document.querySelector<HTMLElement>('#app')
-  if (!root) throw new Error('FreshWDL root element was not found')
+  if (!root) throw new Error('CrispWDL root element was not found')
 
   const config = await loadConfig()
   const store = new AppStore(config, options)
@@ -43,6 +43,6 @@ export async function bootstrap(
 
 export function startupFailed(error: unknown): void {
   const root = document.querySelector<HTMLElement>('#app')
-  if (root) root.textContent = error instanceof Error ? error.message : 'FreshWDL could not start'
+  if (root) root.textContent = error instanceof Error ? error.message : 'CrispWDL could not start'
   console.error(error)
 }

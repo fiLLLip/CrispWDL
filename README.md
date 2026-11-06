@@ -1,37 +1,34 @@
-# FreshWDL
+# CrispWDL
 
-FreshWDL v2 is a mobile-first, static Weather Display dashboard built with Vanilla TypeScript and Vite. It reads the original Weather Display files directly in the browser:
+A mobile-first, static dashboard for [Weather Display](https://www.weather-display.com/) stations. It reads the raw `clientraw*.txt` feeds directly in the browser: no server, API, or conversion step is needed. Built with vanilla TypeScript and Vite, with no external requests (fonts and charts are bundled).
 
-- `clientraw.txt`
-- `clientrawextra.txt`
-- `clientrawhour.txt`
-- `clientrawdaily.txt`
+> **Attribution.** CrispWDL is a fork and redesign of [FreshWDL by Yerren](https://github.com/Yerren/FreshWDL) and builds on its work. Credit for the original project belongs to its author and contributors. Like upstream, it is licensed under the GNU GPL v3 (see [LICENSE](LICENSE)). The redesign was proposed upstream in [Yerren/FreshWDL#61](https://github.com/Yerren/FreshWDL/pull/61).
 
-The feeds remain raw, space-delimited text files. No server-side conversion, API, or preprocessing step is required.
+## Quick start: download and deploy
 
-## Development
+You do not need Node.js or any build tools.
 
-```sh
-npm install
-npm run dev
-```
+1. Download the latest `.zip` (or `.tar.gz`) from the [Releases page](https://github.com/fiLLLip/CrispWDL/releases) and extract it.
+2. Open `crispwdl.config.json` and set your station (see [Configuration](#configuration)). At minimum:
+   ```json
+   {
+     "stationName": "My weather station",
+     "siteName": "My weather station",
+     "locale": "en",
+     "dataMode": "live",
+     "baseUrl": "./"
+   }
+   ```
+3. Upload everything to any static web host, in the domain root or a subdirectory.
+4. Put your four Weather Display files in the same directory (or point `baseUrl` at wherever they are): `clientraw.txt`, `clientrawextra.txt`, `clientrawhour.txt`, `clientrawdaily.txt`.
 
-The checked-in configuration uses unchanged raw feed snapshots in `public/fixtures/`, captured from the Varmestua station. This makes local development and tests deterministic and network-independent.
+Open `index.html` (the dashboard) or `embed.html` (the compact iframe). With `"dataMode": "fixtures"` the dashboard shows bundled sample data instead of your station.
 
-## Validation
+If the feeds live on another origin, that host must send suitable CORS headers.
 
-```sh
-npm test
-npm run typecheck
-npm run build
-npm run preview
-```
+## Configuration
 
-The production bundle is written to `dist/` and contains all application code and dependencies. It does not load JavaScript or CSS from a CDN.
-
-## Live weather configuration
-
-Edit `public/freshwdl.config.json` before building:
+Edit `crispwdl.config.json` in the extracted release (or `public/crispwdl.config.json` when building from source):
 
 ```json
 {
@@ -51,9 +48,9 @@ Edit `public/freshwdl.config.json` before building:
 }
 ```
 
-With `baseUrl` set to `./`, place the built v2 and the four files in the same directory, as with the original FreshWDL. A different same-origin path or absolute URL can also be used. Cross-origin URLs require the feed host to return appropriate CORS headers.
+With `baseUrl` set to `./`, place the dashboard and the four files in the same directory, as with the original FreshWDL. A different same-origin path or absolute URL can also be used. Cross-origin URLs require the feed host to return appropriate CORS headers.
 
-Other configuration fields control the refresh interval, request timeout, initial units, widget visibility, and graph visibility. `pollingIntervalMs` sets how often live feeds are checked in milliseconds; it defaults to 30000 (30 seconds) and can be increased or decreased in `public/freshwdl.config.json`. Every graph left enabled appears in the chart card's series picker; the card shows one series at a time. `siteName` sets the brand text in the top-left corner and `siteUrl` its link target; `stationName` sets the browser tab title and the page heading. The top-right settings menu stores user-selected units and the system/light/dark appearance preference in the browser.
+Other configuration fields control the refresh interval, request timeout, initial units, widget visibility, and graph visibility. `pollingIntervalMs` sets how often live feeds are checked in milliseconds; it defaults to 30000 (30 seconds) and can be increased or decreased in `public/crispwdl.config.json`. Every graph left enabled appears in the chart card's series picker; the card shows one series at a time. `siteName` sets the brand text in the top-left corner and `siteUrl` its link target; `stationName` sets the browser tab title and the page heading. The top-right settings menu stores user-selected units and the system/light/dark appearance preference in the browser.
 
 ### Overview blocks
 
@@ -88,37 +85,6 @@ The sun/moon chart's "Now" marker uses the current browser time, not the reading
 
 The "Updated" stamp counts from the station's own date and clock in `clientraw.txt` (time fields 29-31, day 35, month 36, year 141), not from the moment the file was fetched, so yesterday's data remains old after a reload. The feed does not carry a timezone; its date and time are interpreted in the browser's local timezone, and future timestamps are treated as clock drift and clamped to the fetch time. A newer reading timestamp updates freshness even if the weather values have not changed, without redrawing the weather charts.
 
-## Design
-
-By default, the four overview blocks show temperature, wind, humidity, and rainfall. The rainfall
-block shows the latest cumulative total in Weather Display's 24-hour rain history,
-with today's station-reported total below it, and selects the rainfall chart when
-clicked. Pressure remains available in the chart's series picker. The 24-hour rain
-amount follows the feed's latest history sample rather than the live daily counter;
-the cumulative samples must not be summed. Missing history is shown as a dash.
-
-The precipitation chart shows **amount per measurement interval**, calculated by
-subtracting consecutive cumulative samples before converting units. The first
-sample is only a baseline, so 24 samples provide 23 bars, not a fabricated first
-hour. Dry intervals show zero. Invalid or decreasing sample pairs are omitted
-with a console warning rather than shown as negative precipitation.
-
-The axis uses clean start-hour markers such as `13:00`, while bar tooltips and
-the accessible chart description retain exact intervals such as `13:30–14:30`,
-including irregular intervals. The hour markers are abbreviated time references,
-not interpolated `13:00–14:00` totals: the feed's sampling clock is not necessarily
-on the hour. Dashboard and embed 24-hour totals are unchanged.
-
-The interface follows an app-screen direction dealt by the `design-taste-frontend` skill (`achromatic-ledger`, seed 1224798985): achromatic chrome, one container of KPIs divided by rules, one large chart as the screen's main element, and a 384px rail. The single accent is the station's teal, used only on the selected data series. Charts are drawn as dependency-free SVG by `src/vendor-charts.js`, vendored from that skill with support for separate compact bar-axis labels; the Geist typeface is bundled locally, so the page still makes no external requests.
-
-## Static deployment
-
-1. Run `npm run build`.
-2. Upload the contents of `dist/` to any static web host.
-3. For live mode, make the four raw `clientraw*.txt` files available at the configured base URL.
-
-The build uses relative asset URLs, so it can be hosted at a domain root or in a subdirectory.
-
 ## Compact iframe
 
 The same build includes `embed.html`, a transparent weather view designed around
@@ -144,7 +110,7 @@ The main temperature and its unit stay together on one line, centered vertically
 beside the supporting readings. Its size reserves room for the unit and adapts to
 the number's length so negative and three-digit readings stay in their column.
 
-Set `dashboardUrl` in `freshwdl.config.json` to the full dashboard's location.
+Set `dashboardUrl` in `crispwdl.config.json` to the full dashboard's location.
 It defaults to `./` (the same directory's index page). If you rename the dashboard
 HTML file, use e.g. `"dashboardUrl": "./weather.html"`. Relative paths resolve
 against the embed page's URL; an absolute URL also works. This is separate from
@@ -180,7 +146,7 @@ an error. Transparency reveals the host background; it does not inherit the host
 page's CSS, fonts, or automatically detect its background. Choose a matching
 theme, and do not disable scrolling: expanded error details may need extra room.
 
-The embed uses the same `freshwdl.config.json`, locale, units, feeds, and live
+The embed uses the same `crispwdl.config.json`, locale, units, feeds, and live
 refresh interval as the dashboard, but never reads or changes saved dashboard
 preferences. Fixture mode remains a static sample. Healthy readings have no
 timestamp; stale readings show a compact updated-time warning, escalating to
@@ -191,6 +157,44 @@ are available).
 The embedding site's CSP must allow this URL in `frame-src`. Your weather host
 must also permit the parent site through its `frame-ancestors` CSP and any
 `X-Frame-Options` policy; application code cannot override those HTTP headers.
+
+## Design notes
+
+By default, the four overview blocks show temperature, wind, humidity, and rainfall. The rainfall
+block shows the latest cumulative total in Weather Display's 24-hour rain history,
+with today's station-reported total below it, and selects the rainfall chart when
+clicked. Pressure remains available in the chart's series picker. The 24-hour rain
+amount follows the feed's latest history sample rather than the live daily counter;
+the cumulative samples must not be summed. Missing history is shown as a dash.
+
+The precipitation chart shows **amount per measurement interval**, calculated by
+subtracting consecutive cumulative samples before converting units. The first
+sample is only a baseline, so 24 samples provide 23 bars, not a fabricated first
+hour. Dry intervals show zero. Invalid or decreasing sample pairs are omitted
+with a console warning rather than shown as negative precipitation.
+
+The axis uses clean start-hour markers such as `13:00`, while bar tooltips and
+the accessible chart description retain exact intervals such as `13:30–14:30`,
+including irregular intervals. The hour markers are abbreviated time references,
+not interpolated `13:00–14:00` totals: the feed's sampling clock is not necessarily
+on the hour. Dashboard and embed 24-hour totals are unchanged.
+
+The interface follows an app-screen direction dealt by the `design-taste-frontend` skill (`achromatic-ledger`, seed 1224798985): achromatic chrome, one container of KPIs divided by rules, one large chart as the screen's main element, and a 384px rail. The single accent is the station's teal, used only on the selected data series. Charts are drawn as dependency-free SVG by `src/vendor-charts.js`, vendored from that skill with support for separate compact bar-axis labels; the Geist typeface is bundled locally, so the page still makes no external requests.
+
+## Development
+
+For contributors building from source:
+
+```sh
+npm install
+npm run dev        # local dev server using sample feeds in public/fixtures/
+npm test
+npm run typecheck
+npm run build      # production bundle in dist/
+npm run preview
+```
+
+The checked-in configuration uses unchanged raw feed snapshots in `public/fixtures/`, captured from the Varmestua station, so development and tests are deterministic and network-independent. The production bundle in `dist/` contains all code and dependencies and loads nothing from a CDN; relative asset URLs let it be hosted anywhere.
 
 ## Releases
 

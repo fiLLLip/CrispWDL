@@ -1,7 +1,7 @@
 @import '@fontsource-variable/geist';
 
 /* Tokens from the dealt app sheet: achromatic-ledger, seed 1224798985.
-   The chrome holds no colour; the one hue (FreshWDL's own teal, the sheet's
+   The chrome holds no colour; the one hue (CrispWDL's own teal, the sheet's
    "brand's own hue") goes on the selected 24-hour series and nowhere else. */
 :root {
   --ground: #f8f8f8;
