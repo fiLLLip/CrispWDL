@@ -166,7 +166,7 @@ const translations: Record<Locale, Messages> = {
     forecast: 'Vorhersage',
     graphs: 'Diagramme',
     gust: 'Böen',
-    high: 'Max.m',
+    high: 'Max.',
     humidity: 'Luftfeuchtigkeit',
     illuminated: 'beleuchtet',
     indoor: 'Innen',
