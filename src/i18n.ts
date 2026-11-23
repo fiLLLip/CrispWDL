@@ -217,7 +217,7 @@ const translations: Record<Locale, Messages> = {
     newMoon: 'Neumond',
     now: 'Jetzt',
     sun: 'Sonne',
-    waningCrescent: 'Zunehmende Mondsichel',
+    waningCrescent: 'Abnehmende Mondsichel',
     waningGibbous: 'Abnehmender Dreiviertelmond',
     waxingCrescent: 'Zunehmende Mondsichel',
     waxingGibbous: 'Zunehmender Dreiviertelmond',
